@@ -119,6 +119,8 @@ def make_distribution(function, *pars):
         return function(*pars)
     return distribution
 
+def constant(number):
+    return number
 
 def pending_order(order_list, period):
     """Return the order that arrives in actual period"""

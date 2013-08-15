@@ -9,7 +9,7 @@ import psim_plot
 import psim_control
 import psim_summary
 
-from psim_functions import make_distribution, make_data, Product
+from psim_functions import make_distribution, make_data, Product, constant
 
 
 class MainWindow(QWidget):
@@ -63,9 +63,11 @@ class MainWindow(QWidget):
         periods = int(self.control.periods.text())
 
         product = Product("Product_A",
-                          make_distribution(np.random.normal, 7, 3),
-                          make_distribution(np.random.triangular, 1, 2, 3),
-                          15,
+                          #make_distribution(np.random.normal, 7, 3),
+                          make_distribution(constant, 1),
+                          make_distribution(constant, 0),
+                          #make_distribution(np.random.triangular, 1, 2, 3),
+                          5,
                           100000.0)
 
         if policy_name == 'Qs':
@@ -84,6 +86,7 @@ class MainWindow(QWidget):
                     's': pam3}}
 
         self.df = make_data(product, policy, periods)
+        print(self.df)
         
         carrying_cost = sum(self.df['avg_inv']) * product.price * (0.21) * (periods / 52.0)
         shortage_cost = sum(self.df['lost_sales']) * product.price
