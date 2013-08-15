@@ -62,13 +62,13 @@ class MainWindow(QWidget):
         pam2 = int(self.control.p2.text())
         periods = int(self.control.periods.text())
 
-        product = Product("Product_A",
+        product = Product(name="Product_A",
                           #make_distribution(np.random.normal, 7, 3),
-                          make_distribution(constant, 1),
-                          make_distribution(constant, 0),
                           #make_distribution(np.random.triangular, 1, 2, 3),
-                          5,
-                          100000.0)
+                          demand_dist=make_distribution(constant, 192),
+                          lead_time_dist=make_distribution(constant, 0),
+                          initial_inventory=500,
+                          price=8)
 
         if policy_name == 'Qs':
             policy = {'method': 'Qs', 'arguments': {'Q': pam1, 's': pam2}}
@@ -86,12 +86,21 @@ class MainWindow(QWidget):
                     's': pam3}}
 
         self.df = make_data(product, policy, periods)
-        print(self.df)
         
-        carrying_cost = sum(self.df['avg_inv']) * product.price * (0.21) * (periods / 52.0)
+        # Update summary
+        K = 2 # cost of one order
+        I = 0.02
+        ordering_cost = sum([i > 0 for i in self.df['order']]) * K
+        purchasing_cost = (product.initial_inventory + sum(self.df['order'])) * product.price
+        holding_cost = sum(self.df['avg_inv']) * ((product.price * I) / float(periods))
         shortage_cost = sum(self.df['lost_sales']) * product.price
-        total_cost = carrying_cost + shortage_cost
+        total_cost = ordering_cost + purchasing_cost + holding_cost + shortage_cost
         service = 1 - (sum(self.df['lost_sales']) / sum(self.df['demand']))
+        print("purchasing_cost: ", purchasing_cost)
+        print("ordering cost: ", ordering_cost)
+        print("holding_cost: ", holding_cost)
+        print("shortage_cost: ", shortage_cost)
+
         self.summary.inventory_cost.setText("{:,.2f}".format(total_cost))
         self.summary.service_level.setText("{:.2%}".format(service))
         self.graph.Plot(self.df, policy, periods)
