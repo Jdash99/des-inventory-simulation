@@ -63,10 +63,10 @@ class MainWindow(QWidget):
         periods = int(self.control.periods.text())
 
         product = Product(name="Product_A",
-                          #make_distribution(np.random.normal, 7, 3),
-                          #make_distribution(np.random.triangular, 1, 2, 3),
-                          demand_dist=make_distribution(constant, 192),
-                          lead_time_dist=make_distribution(constant, 0),
+                          #demand_dist=make_distribution(constant, 192),
+                          #lead_time_dist=make_distribution(constant, 0),
+                          demand_dist=make_distribution(np.random.normal, 192, 30),
+                          lead_time_dist=make_distribution(np.random.triangular, 0, 1, 2),
                           initial_inventory=500,
                           price=8)
 

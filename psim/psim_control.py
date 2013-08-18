@@ -5,6 +5,7 @@ from PySide.QtGui import QPushButton,  QWidget, QVBoxLayout, \
 
 
 class ControlLayout(QWidget):
+    """Widget that stores the controls"""
 
     def __init__(self):
         QWidget.__init__(self)
@@ -105,6 +106,7 @@ class ControlLayout(QWidget):
         self.setLayout(self.layout)
 
     def changed_policy(self):
+        """Changes labels if the policy is changed"""
         pol = self.policy.currentText()
         if pol in ['Qs', 'Ss', 'RS']:
             self.p3_label.setText('')
