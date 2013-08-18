@@ -10,11 +10,4 @@ Also includes a chart to visualize how does the inventory levels, the cost and s
 to the selected policy.
 
 
-TODO
-----
-
-* Database driven
-* Show table of simulation data
-* Improve interface
-* Add probability distributions
 
